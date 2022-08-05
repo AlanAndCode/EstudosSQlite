@@ -16,26 +16,33 @@ public class MainActivity extends AppCompatActivity {
 
         try {
             //criar banco de dados
-            SQLiteDatabase bancoDados = openOrCreateDatabase("", MODE_PRIVATE, null);
+            SQLiteDatabase bancoDados = openOrCreateDatabase("app", MODE_PRIVATE, null);
 
             //Criar tabela
             bancoDados.execSQL("CREATE TABLE IF NOT EXISTS pessoas (nome VARCHAR, idade INT(3) )");
 
             //Inserir dados
-            bancoDados.execSQL("INSERT INTO pessoas(nome, idade) VALUES ('Alan', 21) ");
-            bancoDados.execSQL("INSERT INTO pessoas(nome, idade) VALUES ('Maria', 35) ");
+            //bancoDados.execSQL("INSERT INTO pessoas(nome, idade) VALUES ('Priscilla', 27)");
+            //bancoDados.execSQL("INSERT INTO pessoas(nome, idade) VALUES ('Lydice', 21) ");
+            //bancoDados.execSQL("INSERT INTO pessoas(nome, idade) VALUES ('Norman Powell', 29) ");
             //recuperar pessoas
-            Cursor cursor = bancoDados.rawQuery("SELECT nome, idade FROM pesssoas", null);
+            String consulta =
+                    "SELECT nome, idade" +
+                    " FROM pessoas WHERE 1=1 ORDER BY idade ASC ";
+            Cursor cursor = bancoDados.rawQuery(consulta, null);
 
             //inndices tabela
             int indiceNome = cursor.getColumnIndex("nome");
             int indiceIdade = cursor.getColumnIndex("idade");
             cursor.moveToFirst();
             while (cursor != null) {
+                String nome = cursor.getString(indiceNome);
+                String idade = cursor.getString(indiceIdade);
 
-                Log.i("RESULTADO - nome: ", cursor.getString(indiceNome));
-                Log.i("RESULTADO - idade: ", cursor.getString(indiceIdade));
+                Log.i("RESULTADO - nome ", nome + " / idade: " + idade);
+
                 cursor.moveToNext();
+
             }
         } catch (Exception e) {
             e.printStackTrace();
